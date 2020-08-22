@@ -35,6 +35,19 @@ namespace ScreenshoterTask
             string input = tb_input.Text;
             Screenshoter screenshoter = new Screenshoter(resolution,path,threads,timeout,input);
             screenshoter.GetAllScreenshots();
+
+
         }
+
+        private void PublishResults(IList<string> results)
+        {
+            tb_input.Clear();
+            tb_input.Text += results.Count();
+            foreach (string result in results)
+            {
+                tb_input.Text += "* "+result + "\n";
+            }
+        }
+        
     }
 }
