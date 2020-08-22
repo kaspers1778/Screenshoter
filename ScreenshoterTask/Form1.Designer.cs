@@ -39,6 +39,7 @@
             this.tb_resolution = new System.Windows.Forms.TextBox();
             this.btn_browse = new System.Windows.Forms.Button();
             this.btn_start = new System.Windows.Forms.Button();
+            this.btn_goToScreenshots = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tb_input
@@ -93,6 +94,7 @@
             this.tb_path.Size = new System.Drawing.Size(227, 20);
             this.tb_path.TabIndex = 5;
             this.tb_path.Text = "D:\\Projects\\Screenshoter\\Screenshoter\\ScreenshoterTask\\Screenshots";
+            this.tb_path.Leave += new System.EventHandler(this.btn_goToScreenshots_Click);
             // 
             // mtb_threads
             // 
@@ -101,7 +103,7 @@
             this.mtb_threads.Name = "mtb_threads";
             this.mtb_threads.Size = new System.Drawing.Size(32, 20);
             this.mtb_threads.TabIndex = 6;
-            this.mtb_threads.Text = "5";
+            this.mtb_threads.Text = "2";
             this.mtb_threads.ValidatingType = typeof(int);
             // 
             // mtb_timeout
@@ -111,7 +113,7 @@
             this.mtb_timeout.Name = "mtb_timeout";
             this.mtb_timeout.Size = new System.Drawing.Size(32, 20);
             this.mtb_timeout.TabIndex = 7;
-            this.mtb_timeout.Text = "5";
+            this.mtb_timeout.Text = "10";
             this.mtb_timeout.ValidatingType = typeof(int);
             // 
             // tb_resolution
@@ -152,12 +154,23 @@
             this.btn_start.UseVisualStyleBackColor = true;
             this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
             // 
+            // btn_goToScreenshots
+            // 
+            this.btn_goToScreenshots.Location = new System.Drawing.Point(320, 415);
+            this.btn_goToScreenshots.Name = "btn_goToScreenshots";
+            this.btn_goToScreenshots.Size = new System.Drawing.Size(145, 23);
+            this.btn_goToScreenshots.TabIndex = 11;
+            this.btn_goToScreenshots.Text = "Go to screenshots directory";
+            this.btn_goToScreenshots.UseVisualStyleBackColor = true;
+            this.btn_goToScreenshots.Click += new System.EventHandler(this.btn_goToScreenshots_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(477, 450);
+            this.Controls.Add(this.btn_goToScreenshots);
             this.Controls.Add(this.btn_start);
             this.Controls.Add(this.btn_browse);
             this.Controls.Add(this.tb_resolution);
@@ -189,6 +202,7 @@
         private System.Windows.Forms.TextBox tb_resolution;
         private System.Windows.Forms.Button btn_browse;
         private System.Windows.Forms.Button btn_start;
+        private System.Windows.Forms.Button btn_goToScreenshots;
     }
 }
 

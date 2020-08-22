@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,18 @@ namespace ScreenshoterTask
                 tb_input.Text += "* "+result + "\n";
             }
         }
-        
+
+        private void btn_goToScreenshots_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(tb_path.Text);
+            }
+            catch(Exception f)
+            {
+                MessageBox.Show("The invalid path to directory","EROR",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+            
+        }
     }
 }

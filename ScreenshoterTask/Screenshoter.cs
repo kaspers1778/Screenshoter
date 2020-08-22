@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Collections.Concurrent;
 
 namespace ScreenshoterTask
 {
@@ -19,7 +20,7 @@ namespace ScreenshoterTask
         int _amountOfThreads;
         int _timeout;
         List<string> _inputLinks = new List<string>();
-        Queue<string> _links = new Queue<string>();
+        ConcurrentQueue<string> _links = new ConcurrentQueue<string>();
         List<string> _logs = new List<string>();
 
         public Screenshoter(string resolution, string path, int amountOfThreads, int timeout, string links)
@@ -37,26 +38,27 @@ namespace ScreenshoterTask
             return (Array.ConvertAll(resolution.Split('x'), s => int.Parse(s)));
         }
 
-        private void GetScreenshot(object callback)
+        private void GetScreenshot()
         {
-            if(_links.Count > 0)
-            {
-                
-                IWebDriver driver = InitializeDriver();
-                string input = _links.Dequeue();
+            var input = "";
+            while (_links.TryDequeue(out input))
+            {                
+                IWebDriver driver = InitializeDriver();                
                 string url = GetURL(input);
-                
                 try
                 {
                     driver.Url = url;
-                    AddToLog(input, "is done.");
+                    AddToLog(input, " is done.");
+                    ((ITakesScreenshot)driver).GetScreenshot().SaveAsFile(String.Format("{0}/{1}.png", _path, GetName(url)), ScreenshotImageFormat.Png);
                 }
-                catch (Exception e)
+                catch (WebDriverTimeoutException tex)
                 {
-                    AddToLog(input, "is not reached.");
+                    AddToLog(input, " timeout of loading is over.");
                 }
-
-                ((ITakesScreenshot)driver).GetScreenshot().SaveAsFile(String.Format("{0}/{1}.png", _path, GetName(url)), ScreenshotImageFormat.Png);
+                catch (WebDriverException wex)
+                {
+                    AddToLog(input, " reached EROR page.");
+                }
                 driver.Quit();
             }
         }
@@ -81,24 +83,19 @@ namespace ScreenshoterTask
             if (Regex.IsMatch(inputURL, @"^https?://"))
                 return inputURL;
             else 
-                return "https://" + inputURL;
+                return "https://" + inputURL + "/";
         }
 
         private string GetName(string url)
         {
-            return Regex.Match(url, @"^https?://(.+\.\w+)/").Groups[1].ToString();
+            return Regex.Match(url, @"^https?://(.+\.[a-zA-Z]+)/").Groups[1].ToString();
         }
 
         public void GetAllScreenshots()
         {
-       //     Console.WriteLine(ThreadPool.SetMaxThreads(_amountOfThreads, _amountOfThreads));
-            Console.WriteLine(ThreadPool.SetMinThreads(_amountOfThreads, _amountOfThreads));
-
-            for (int i = 0; i < _inputLinks.Count; i++)
-            {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(GetScreenshot));
-            }
-
+             int threadCount = _amountOfThreads;
+             for(int i = 0;i<threadCount;i++)
+                new Thread(GetScreenshot) {IsBackground = true }.Start();
         }
 
         public IList<string> GetLogs()
