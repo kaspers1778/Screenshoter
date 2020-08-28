@@ -31,12 +31,21 @@ namespace ScreenshoterTask
 
         private void btn_start_Click(object sender, EventArgs e)
         {
+            string browser = "";
+            if (rb_Chrome.Checked)
+            {
+                browser = "Chrome";
+            }
+            else if (rb_Firefox.Checked)
+            {
+                browser = "Firefox";
+            }
             string resolution = tb_resolution.Text;
             string path = tb_path.Text;
             int threads = Convert.ToInt32(mtb_threads.Text);
             int timeout = Convert.ToInt32(mtb_timeout.Text);
             string input = tb_input.Text;
-            screenshoter = new Screenshoter(resolution, path, threads, timeout, input);
+            screenshoter = new Screenshoter(resolution, path, threads, timeout,browser, input);
             screenshoter.GetAllScreenshots();
         }
 
@@ -66,7 +75,7 @@ namespace ScreenshoterTask
             {
                 foreach (string result in screenshoter.GetLogs())
                 {
-                    tb_input.Text += "*" + result+";" + newLine ;
+                    tb_input.Text += result+";" + newLine ;
                 }
 
                 tb_input.Text += "Done";
@@ -76,7 +85,7 @@ namespace ScreenshoterTask
                 tb_input.Text += "Running..."+ newLine;
                 foreach (string result in screenshoter.GetLogs())
                 {
-                    tb_input.Text += "* " + result + ";" + newLine;
+                    tb_input.Text += result + ";" + newLine;
                 }
             }
         }

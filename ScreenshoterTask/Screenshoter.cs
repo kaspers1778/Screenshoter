@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Chrome;
 using System.Drawing;
 using System.Threading;
 using System.Text.RegularExpressions;
@@ -19,16 +20,18 @@ namespace ScreenshoterTask
         string _path;
         int _amountOfThreads;
         int _timeout;
+        string _browser;
         List<string> _inputLinks = new List<string>();
         ConcurrentQueue<string> _links = new ConcurrentQueue<string>();
         List<string> _logs = new List<string>();
 
-        public Screenshoter(string resolution, string path, int amountOfThreads, int timeout, string links)
+        public Screenshoter(string resolution, string path, int amountOfThreads, int timeout,string browser, string links)
         {
             _resolution = GetResolution(resolution);
             _path = path;
             _amountOfThreads = amountOfThreads;
             _timeout = timeout;
+            _browser = browser;
             _inputLinks = (links.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)).ToList<string>();
             _inputLinks.ForEach(l => _links.Enqueue(l));
         }
@@ -42,8 +45,17 @@ namespace ScreenshoterTask
         {
             var input = "";
             while (_links.TryDequeue(out input))
-            {                
-                IWebDriver driver = InitializeDriver();
+            {
+                IWebDriver driver;
+                try
+                {
+                    driver = InitializeDriver();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    driver = new FirefoxDriver();
+                }
                 string url = GetURL(input);
                 try
                 {
@@ -63,8 +75,9 @@ namespace ScreenshoterTask
                 {
                     AddToLog(input, " has unsecure sertificate.");
                 }
-                catch
+                catch(Exception e)
                 {
+                    MessageBox.Show(e.Message);
                     AddToLog(input, "can't be done");
                 }
                 finally
@@ -83,15 +96,28 @@ namespace ScreenshoterTask
 
         private IWebDriver InitializeDriver()
         {
-            FirefoxOptions options = new FirefoxOptions();
-            options.AddArgument("--headless");
-            var serv = FirefoxDriverService.CreateDefaultService();
-            serv.HideCommandPromptWindow = true;
-            IWebDriver driver = new FirefoxDriver(serv,options);
-            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(_timeout);
-            
-            driver.Manage().Window.Size = new Size(_resolution[0], _resolution[1] + 74);//delta high is 74 pxl
-            return driver;
+            if(_browser == "Chrome")
+            {
+                ChromeOptions options = new ChromeOptions();
+                options.AddArgument("--headless");
+                var serv = ChromeDriverService.CreateDefaultService(Environment.CurrentDirectory);
+                serv.HideCommandPromptWindow = true;
+                IWebDriver driver = new ChromeDriver(serv, options);
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(_timeout);
+                driver.Manage().Window.Size = new Size(_resolution[0], _resolution[1] + 74);//delta high is 74 pxl
+                return driver;
+            }
+            else
+            {
+                FirefoxOptions options = new FirefoxOptions();
+                options.AddArgument("--headless");
+                var serv = FirefoxDriverService.CreateDefaultService(Environment.CurrentDirectory);
+                serv.HideCommandPromptWindow = true;
+                IWebDriver driver = new FirefoxDriver(serv, options);
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(_timeout);
+                driver.Manage().Window.Size = new Size(_resolution[0], _resolution[1] + 74);//delta high is 74 pxl
+                return driver;
+            }
         }
 
         private string GetURL(string inputURL)

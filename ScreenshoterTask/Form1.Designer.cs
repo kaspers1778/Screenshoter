@@ -41,6 +41,9 @@
             this.btn_start = new System.Windows.Forms.Button();
             this.btn_goToScreenshots = new System.Windows.Forms.Button();
             this.btn_result = new System.Windows.Forms.Button();
+            this.rb_Firefox = new System.Windows.Forms.RadioButton();
+            this.rb_Chrome = new System.Windows.Forms.RadioButton();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tb_input
@@ -94,7 +97,6 @@
             this.tb_path.Name = "tb_path";
             this.tb_path.Size = new System.Drawing.Size(227, 20);
             this.tb_path.TabIndex = 5;
-            this.tb_path.Text = "D:\\Projects\\Screenshoter\\Screenshoter\\ScreenshoterTask\\Screenshots";
             this.tb_path.Leave += new System.EventHandler(this.btn_goToScreenshots_Click);
             // 
             // mtb_threads
@@ -104,7 +106,7 @@
             this.mtb_threads.Name = "mtb_threads";
             this.mtb_threads.Size = new System.Drawing.Size(32, 20);
             this.mtb_threads.TabIndex = 6;
-            this.mtb_threads.Text = "2";
+            this.mtb_threads.Text = "1";
             this.mtb_threads.ValidatingType = typeof(int);
             // 
             // mtb_timeout
@@ -175,12 +177,46 @@
             this.btn_result.UseVisualStyleBackColor = true;
             this.btn_result.Click += new System.EventHandler(this.btn_result_Click);
             // 
+            // rb_Firefox
+            // 
+            this.rb_Firefox.AutoSize = true;
+            this.rb_Firefox.Location = new System.Drawing.Point(107, 2);
+            this.rb_Firefox.Name = "rb_Firefox";
+            this.rb_Firefox.Size = new System.Drawing.Size(56, 17);
+            this.rb_Firefox.TabIndex = 14;
+            this.rb_Firefox.Text = "Firefox";
+            this.rb_Firefox.UseVisualStyleBackColor = true;
+            // 
+            // rb_Chrome
+            // 
+            this.rb_Chrome.AutoSize = true;
+            this.rb_Chrome.Checked = true;
+            this.rb_Chrome.Location = new System.Drawing.Point(207, 2);
+            this.rb_Chrome.Name = "rb_Chrome";
+            this.rb_Chrome.Size = new System.Drawing.Size(61, 17);
+            this.rb_Chrome.TabIndex = 15;
+            this.rb_Chrome.TabStop = true;
+            this.rb_Chrome.Text = "Chrome";
+            this.rb_Chrome.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 2);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(51, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Browser :";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(477, 450);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.rb_Chrome);
+            this.Controls.Add(this.rb_Firefox);
             this.Controls.Add(this.btn_result);
             this.Controls.Add(this.btn_goToScreenshots);
             this.Controls.Add(this.btn_start);
@@ -216,6 +252,9 @@
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Button btn_goToScreenshots;
         private System.Windows.Forms.Button btn_result;
+        private System.Windows.Forms.RadioButton rb_Firefox;
+        private System.Windows.Forms.RadioButton rb_Chrome;
+        private System.Windows.Forms.Label label5;
     }
 }
 
