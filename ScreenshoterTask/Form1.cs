@@ -13,7 +13,6 @@ namespace ScreenshoterTask
 {
     public partial class Form1 : Form
     {
-        CloudScreenshoter Clscreenshoter;
         Screenshoter screenshoter;
         public Form1()
         {
@@ -37,13 +36,8 @@ namespace ScreenshoterTask
             int threads = Convert.ToInt32(mtb_threads.Text);
             int timeout = Convert.ToInt32(mtb_timeout.Text);
             string input = tb_input.Text;
-          //  Clscreenshoter = new CloudScreenshoter(resolution,path,threads,timeout,input);
-            //Clscreenshoter.GetAllScreenshots();
             screenshoter = new Screenshoter(resolution, path, threads, timeout, input);
             screenshoter.GetAllScreenshots();
-
-
-
         }
 
 
@@ -66,7 +60,7 @@ namespace ScreenshoterTask
             string newLine = Environment.NewLine;
             if (screenshoter.GetLogs().Count == 0)
             {
-                tb_input.Text += "Running...\n";
+                tb_input.Text += "Running..." + newLine;
             }
             else if(screenshoter.GetLogs().Count() == screenshoter.GetAmountOfURLs())
             {
@@ -79,7 +73,7 @@ namespace ScreenshoterTask
             }
             else
             {
-                tb_input.Text += "Running...\n";
+                tb_input.Text += "Running..."+ newLine;
                 foreach (string result in screenshoter.GetLogs())
                 {
                     tb_input.Text += "* " + result + ";" + newLine;
