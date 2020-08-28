@@ -40,6 +40,7 @@
             this.btn_browse = new System.Windows.Forms.Button();
             this.btn_start = new System.Windows.Forms.Button();
             this.btn_goToScreenshots = new System.Windows.Forms.Button();
+            this.btn_result = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tb_input
@@ -164,12 +165,23 @@
             this.btn_goToScreenshots.UseVisualStyleBackColor = true;
             this.btn_goToScreenshots.Click += new System.EventHandler(this.btn_goToScreenshots_Click);
             // 
+            // btn_result
+            // 
+            this.btn_result.Location = new System.Drawing.Point(154, 415);
+            this.btn_result.Name = "btn_result";
+            this.btn_result.Size = new System.Drawing.Size(75, 23);
+            this.btn_result.TabIndex = 13;
+            this.btn_result.Text = "Check result";
+            this.btn_result.UseVisualStyleBackColor = true;
+            this.btn_result.Click += new System.EventHandler(this.btn_result_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(477, 450);
+            this.Controls.Add(this.btn_result);
             this.Controls.Add(this.btn_goToScreenshots);
             this.Controls.Add(this.btn_start);
             this.Controls.Add(this.btn_browse);
@@ -203,6 +215,7 @@
         private System.Windows.Forms.Button btn_browse;
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Button btn_goToScreenshots;
+        private System.Windows.Forms.Button btn_result;
     }
 }
 

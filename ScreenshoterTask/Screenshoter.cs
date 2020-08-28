@@ -43,7 +43,7 @@ namespace ScreenshoterTask
             var input = "";
             while (_links.TryDequeue(out input))
             {                
-                IWebDriver driver = InitializeDriver();                
+                IWebDriver driver = InitializeDriver();
                 string url = GetURL(input);
                 try
                 {
@@ -59,21 +59,37 @@ namespace ScreenshoterTask
                 {
                     AddToLog(input, " reached EROR page.");
                 }
-                driver.Quit();
+                catch (InvalidOperationException)
+                {
+                    AddToLog(input, " has unsecure sertificate.");
+                }
+                catch
+                {
+                    AddToLog(input, "can't be done");
+                }
+                finally
+                {
+                    driver.Quit();
+                }
             }
         }
 
         private void AddToLog(string url, string result)
-        {
-            _logs.Add(url + " " + result);
+        { 
+   
+                _logs.Add(url + " " + result);
+  
         }
 
         private IWebDriver InitializeDriver()
         {
             FirefoxOptions options = new FirefoxOptions();
             options.AddArgument("--headless");
-            IWebDriver driver = new FirefoxDriver(options);
+            var serv = FirefoxDriverService.CreateDefaultService();
+            serv.HideCommandPromptWindow = true;
+            IWebDriver driver = new FirefoxDriver(serv,options);
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(_timeout);
+            
             driver.Manage().Window.Size = new Size(_resolution[0], _resolution[1] + 74);//delta high is 74 pxl
             return driver;
         }
@@ -101,6 +117,11 @@ namespace ScreenshoterTask
         public IList<string> GetLogs()
         {
             return _logs;
+        }
+
+        public int GetAmountOfURLs()
+        {
+            return _inputLinks.Count();
         }
     }
 }

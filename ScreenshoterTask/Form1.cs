@@ -13,9 +13,12 @@ namespace ScreenshoterTask
 {
     public partial class Form1 : Form
     {
+        CloudScreenshoter Clscreenshoter;
+        Screenshoter screenshoter;
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void btn_browse_Click(object sender, EventArgs e)
@@ -34,21 +37,15 @@ namespace ScreenshoterTask
             int threads = Convert.ToInt32(mtb_threads.Text);
             int timeout = Convert.ToInt32(mtb_timeout.Text);
             string input = tb_input.Text;
-            Screenshoter screenshoter = new Screenshoter(resolution,path,threads,timeout,input);
+          //  Clscreenshoter = new CloudScreenshoter(resolution,path,threads,timeout,input);
+            //Clscreenshoter.GetAllScreenshots();
+            screenshoter = new Screenshoter(resolution, path, threads, timeout, input);
             screenshoter.GetAllScreenshots();
 
 
+
         }
 
-        private void PublishResults(IList<string> results)
-        {
-            tb_input.Clear();
-            tb_input.Text += results.Count();
-            foreach (string result in results)
-            {
-                tb_input.Text += "* "+result + "\n";
-            }
-        }
 
         private void btn_goToScreenshots_Click(object sender, EventArgs e)
         {
@@ -61,6 +58,33 @@ namespace ScreenshoterTask
                 MessageBox.Show("The invalid path to directory","EROR",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             
+        }
+
+        private void btn_result_Click(object sender, EventArgs e)
+        {
+            tb_input.Clear();
+            string newLine = Environment.NewLine;
+            if (screenshoter.GetLogs().Count == 0)
+            {
+                tb_input.Text += "Running...\n";
+            }
+            else if(screenshoter.GetLogs().Count() == screenshoter.GetAmountOfURLs())
+            {
+                foreach (string result in screenshoter.GetLogs())
+                {
+                    tb_input.Text += "*" + result+";" + newLine ;
+                }
+
+                tb_input.Text += "Done";
+            }
+            else
+            {
+                tb_input.Text += "Running...\n";
+                foreach (string result in screenshoter.GetLogs())
+                {
+                    tb_input.Text += "* " + result + ";" + newLine;
+                }
+            }
         }
     }
 }
